@@ -4,7 +4,6 @@
   apt:
     update_cache: true
     force_apt_get: true
-
 - name: Install Dockerio
   apt:
     name:
@@ -12,13 +11,11 @@
         - docker-compose
     state: present
     update_cache: yes
-
 - name: Habilitar Docker no boot
   service:
     name: docker
     enabled: yes
     state: started
-
 - name: Copiando arquivos para servidor
   copy:
     src: "{{ item }}"
@@ -26,4 +23,3 @@
   with_items:
     - docker-compose.yml
     - Dockerfile
-
