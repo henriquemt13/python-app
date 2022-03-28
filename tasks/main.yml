@@ -1,0 +1,29 @@
+---
+# tasks file for python-app
+- name: Update apt
+  apt:
+    update_cache: true
+    force_apt_get: true
+
+- name: Install Dockerio
+  apt:
+    name:
+        - docker.io
+        - docker-compose
+    state: present
+    update_cache: yes
+
+- name: Habilitar Docker no boot
+  service:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Copiando arquivos para servidor
+  copy:
+    src: "{{ item }}"
+    dest: "/home/admin/{{ item }}"
+  with_items:
+    - docker-compose.yml
+    - Dockerfile
+
