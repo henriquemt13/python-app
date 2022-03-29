@@ -1,25 +1,32 @@
+
 ---
-# tasks file for python-app
-- name: Update apt
+- name: Instalando Docker
   apt:
-    update_cache: true
-    force_apt_get: true
-- name: Install Dockerio
-  apt:
-    name:
-        - docker.io
-        - docker-compose
-    state: present
+    name: docker.io
     update_cache: yes
+    state: present
+- name: Instalando docker-compose
+  apt:
+    name: docker-compose
+    update_cache: yes
+    state: present
 - name: Habilitar Docker no boot
   service:
     name: docker
     enabled: yes
     state: started
-- name: Copiando arquivos para servidor
+- name: Copiando arquivos para o host
   copy:
     src: "{{ item }}"
     dest: "/home/admin/{{ item }}"
   with_items:
     - docker-compose.yml
     - Dockerfile
+    - app.py
+    - requirements.txt
+- name: Construindo a imagem Docker
+  command: docker build -t pythonapp:1.0 .
+  register: docker_build
+- name: Subindo a aplicacao
+  command: docker-compose up -d
+  register: docker_compose_up
